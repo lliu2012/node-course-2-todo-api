@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 var { mongoose } = require('./db/mongoose');
 var { Todo } = require('./model/todo');
 var { User } = require('./model/user');
+var { authenticate } = require('./middleware/authenticate');
 
 var app = express();
 const port = process.env.PORT;
@@ -134,6 +135,10 @@ app.get('/users', (req, res) => {
       res.status(400).send(e);
     }
   );
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
 });
 
 app.listen(port, () => {
